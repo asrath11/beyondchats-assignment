@@ -4,7 +4,7 @@ dotenv.config({ path: '.env' })
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-import scrapeRouter from './routes/scrape.route.js'
+import articleRouter from './routes/article.route.js'
 
 const app = express()
 
@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use(morgan('dev'))
-app.use('/scrape',scrapeRouter)
+app.use('/articles', articleRouter)
 
 const PORT = process.env.PORT || 3000
 
