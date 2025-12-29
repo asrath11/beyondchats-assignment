@@ -1,7 +1,0 @@
-services:
-  backend:
-    language: Node
-    path: backend
-    buildCommand: "npm install && npx prisma generate && npm run build"
-    startCommand: "node dist/app.js"
-    nodeVersion: "24.11.1"
