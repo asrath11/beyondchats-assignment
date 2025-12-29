@@ -41,7 +41,7 @@ export const ArticleCard = ({
       <CardHeader>
         <div className='flex justify-between items-start gap-2'>
           <CardTitle className='text-lg line-clamp-2'>{article.title}</CardTitle>
-          <div className='flex gap-2 flex-shrink-0'>
+          <div className='flex gap-2 shrink-0'>
             {hasEnhanced && (
               <Badge variant={showEnhanced ? 'default' : 'secondary'}>
                 {showEnhanced ? 'Enhanced' : 'Original'}
