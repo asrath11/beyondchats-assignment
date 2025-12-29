@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import { PrismaClient } from '../generated/prisma/client.js';
+import { PrismaClient } from '../../generated/prisma/client.js';
 import { scrapeOldestArticles } from '../scraper/scraperArticle.js';
 import { scrapeFullArticle } from '../scraper/scrapeContent.js';
 import 'dotenv/config';

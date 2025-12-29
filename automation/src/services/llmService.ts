@@ -67,13 +67,19 @@ Use these reference URLs from the sources above.
 
   try {
     const response = await genAIInstance.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
     });
 
+    // Extract URLs from referenceContents (they start with "Source: ")
+    const referenceUrls = referenceContents.map(content => {
+      const match = content.match(/^Source: (https?:\/\/[^\n]+)/);
+      return match ? match[1] : '';
+    }).filter(url => url !== '');
+
     return {
       enhancedContent: response.text || '',
-      references: referenceContents,
+      references: referenceUrls,
     };
   } catch (error: any) {
     console.error('Error calling Gemini API:', {
