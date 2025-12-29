@@ -1,7 +1,7 @@
 // src/services/llmService.ts
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY as string);
 
 export async function enhanceArticleWithLLM(
   originalContent: string,
@@ -9,22 +9,51 @@ export async function enhanceArticleWithLLM(
 ): Promise<{ enhancedContent: string; references: string[] }> {
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-  const prompt = `You are an expert content editor. Please enhance the following article to match the style and quality of the reference articles provided.
-  
-  Original Article:
-  ${originalContent}
+  const prompt = `
+You are an expert content editor. 
+Your job is to improve the article below while keeping its meaning accurate.
+Use the reference articles ONLY to learn the **writing style, tone, structure, and formatting**. 
+Do NOT copy sentences or wording from the references.
 
-  Reference Articles (for style and quality reference only):
-  ${referenceContents.join('\n\n---\n\n')}
+---
 
-  Please:
-  1. Improve the formatting and structure
-  2. Make the content more engaging and professional
-  3. Keep the core information intact
-  4. Add proper headings and subheadings
-  5. End with a "References" section listing the reference articles
+## Original Article
+${originalContent}
 
-  Return the enhanced article in markdown format.`;
+---
+
+## Reference Articles (style & formatting only – do NOT copy)
+${referenceContents.join('\n\n---\n\n')}
+
+---
+
+## Rewrite Rules
+1. Keep the same core meaning, facts, and intent.
+2. Rewrite fully in your own words (no plagiarism).
+3. Improve clarity, flow, and readability.
+4. Use a neutral, professional, informative tone. 
+5. Use Markdown formatting with:  
+   - A clear title
+   - Meaningful section headings (##)
+   - Short paragraphs
+   - Bullet points where useful
+6. Do NOT add new facts unless stated in the original.
+7. If unsure, keep the original meaning.
+8. Avoid filler or unnecessary wording.
+
+---
+
+## Output Format (VERY IMPORTANT)
+
+Return ONLY the improved article in **Markdown** ending with:
+
+## References
+- <reference link 1>
+- <reference link 2>
+
+Use these reference URLs:
+${referenceContents.join('\n')}
+`;
 
   try {
     const result = await model.generateContent(prompt);
