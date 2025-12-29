@@ -67,15 +67,17 @@ Use these reference URLs from the sources above.
 
   try {
     const response = await genAIInstance.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash-lite',
       contents: prompt,
     });
 
     // Extract URLs from referenceContents (they start with "Source: ")
-    const referenceUrls = referenceContents.map(content => {
-      const match = content.match(/^Source: (https?:\/\/[^\n]+)/);
-      return match ? match[1] : '';
-    }).filter(url => url !== '');
+    const referenceUrls: string[] = referenceContents
+      .map(content => {
+        const match = content.match(/^Source: (https?:\/\/[^\n]+)/);
+        return match ? match[1] : null;
+      })
+      .filter((url): url is string => url !== null);
 
     return {
       enhancedContent: response.text || '',
