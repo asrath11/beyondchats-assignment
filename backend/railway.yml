@@ -1,0 +1,12 @@
+language: Node
+
+build:
+  run:
+    - cd backend
+    - npm install
+    - npx prisma generate
+    - npm run build
+
+start:
+  workdir: backend
+  run: node dist/app.js
