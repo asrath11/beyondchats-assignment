@@ -10,9 +10,13 @@ import { type Article } from '@/types';
 
 function App() {
   const { articles, loading, error, refetch } = useArticles();
+  console.log(articles);
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);
 
-  const selectedArticleData = articles.find(
+  // Ensure articles is always an array
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
+  const selectedArticleData = safeArticles.find(
     (article) => article.id === selectedArticle
   );
 
@@ -20,7 +24,7 @@ function App() {
     return article.updatedAt !== article.createdAt;
   };
 
-  const enhancedArticles = articles.filter(hasEnhancedVersion);
+  const enhancedArticles = safeArticles.filter(hasEnhancedVersion);
 
   return (
     <div className='min-h-screen bg-background'>
@@ -38,7 +42,8 @@ function App() {
             </div>
             <div className='flex items-center gap-4'>
               <div className='text-sm text-muted-foreground hidden sm:block'>
-                {articles.length} articles • {enhancedArticles.length} enhanced
+                {safeArticles.length} articles • {enhancedArticles.length}{' '}
+                enhanced
               </div>
               <Button
                 onClick={refetch}
@@ -93,7 +98,7 @@ function App() {
             <TabsList className='grid w-full grid-cols-3'>
               <TabsTrigger value='all' className='gap-2'>
                 <FileText className='h-4 w-4' />
-                All Articles ({articles.length})
+                All Articles ({safeArticles.length})
               </TabsTrigger>
               <TabsTrigger value='enhanced' className='gap-2'>
                 <Sparkles className='h-4 w-4' />
@@ -101,7 +106,7 @@ function App() {
               </TabsTrigger>
               <TabsTrigger value='original' className='gap-2'>
                 <FileText className='h-4 w-4' />
-                Original Only ({articles.length - enhancedArticles.length})
+                Original Only ({safeArticles.length - enhancedArticles.length})
               </TabsTrigger>
             </TabsList>
 
@@ -113,7 +118,7 @@ function App() {
                 </p>
               </div>
               <ArticleList
-                articles={articles}
+                articles={safeArticles}
                 loading={loading}
                 error={error}
                 onRefresh={refetch}
@@ -149,7 +154,7 @@ function App() {
                 </p>
               </div>
               <ArticleList
-                articles={articles.filter(
+                articles={safeArticles.filter(
                   (article) => !hasEnhancedVersion(article)
                 )}
                 loading={loading}
@@ -163,7 +168,7 @@ function App() {
           </Tabs>
         )}
 
-        {!selectedArticle && articles.length > 0 && (
+        {!selectedArticle && safeArticles.length > 0 && (
           <div className='mt-8 text-center'>
             <p className='text-sm text-muted-foreground'>
               Click on any article to view both original and enhanced versions

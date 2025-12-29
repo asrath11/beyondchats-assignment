@@ -11,10 +11,13 @@ export function useArticles() {
             setLoading(true);
             setError(null);
             const data = await apiService.getAllArticles();
-            setArticles(data);
+            // Ensure data is an array
+            setArticles(Array.isArray(data) ? data : []);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to fetch articles');
             console.error('Error fetching articles:', err);
+            // Set empty array on error to prevent TypeError
+            setArticles([]);
         } finally {
             setLoading(false);
         }

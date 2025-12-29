@@ -1,3 +1,5 @@
+import axios, { type AxiosInstance } from 'axios';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export interface Article {
@@ -12,26 +14,27 @@ export interface Article {
 }
 
 class ApiService {
+    private api: AxiosInstance;
     private baseUrl: string;
 
     constructor(baseUrl: string = API_BASE_URL) {
         this.baseUrl = baseUrl;
+        this.api = axios.create({
+            baseURL: baseUrl,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
     }
 
     async getAllArticles(): Promise<Article[]> {
-        const response = await fetch(`${this.baseUrl}/api/articles`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch articles: ${response.statusText}`);
-        }
-        return response.json();
+        const response = await this.api.get<Article[]>('/api/articles');
+        return response.data;
     }
 
     async getArticleById(id: string): Promise<Article> {
-        const response = await fetch(`${this.baseUrl}/api/articles/${id}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch article: ${response.statusText}`);
-        }
-        return response.json();
+        const response = await this.api.get<Article>(`/api/articles/${id}`);
+        return response.data;
     }
 
     async createArticle(data: {
@@ -39,17 +42,8 @@ class ApiService {
         link: string;
         content: string;
     }): Promise<Article> {
-        const response = await fetch(`${this.baseUrl}/api/articles`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-            throw new Error(`Failed to create article: ${response.statusText}`);
-        }
-        return response.json();
+        const response = await this.api.post<Article>('/api/articles', data);
+        return response.data;
     }
 
     async updateArticle(
