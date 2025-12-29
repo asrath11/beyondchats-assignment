@@ -73,7 +73,7 @@ Use these reference URLs from the sources above.
 
     // Extract URLs from referenceContents (they start with "Source: ")
     const referenceUrls: string[] = referenceContents
-      .map(content => {
+      .map((content) => {
         const match = content.match(/^Source: (https?:\/\/[^\n]+)/);
         return match ? match[1] : null;
       })
