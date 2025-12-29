@@ -76,7 +76,7 @@ export const ArticleCard = ({
       <CardContent>
         <div className='prose prose-sm max-w-none'>
           <p className='text-sm text-muted-foreground leading-relaxed'>
-            {truncateContent(article.content)}
+            {truncateContent(article.originalContent)}
           </p>
         </div>
       </CardContent>

@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-console.log(process.env.API_BASE_URL)
-
+console.log(process.env.API_BASE_URL);
 
 import { scrapeArticleContent } from './scraper/contentScraper';
 import { getAllArticles, updateArticle } from './services/apiService';
@@ -42,12 +41,16 @@ async function processArticle(article: any): Promise<void> {
 
   // Enhance with AI
   console.log('🤖 Enhancing article with AI...');
-  const enhancedResult = await enhanceArticleWithLLM(article.content, referenceContents);
+  const enhancedResult = await enhanceArticleWithLLM(
+    article.originalContent,
+    referenceContents
+  );
 
   // Save to database
   console.log('💾 Saving enhanced article...');
   const updatedArticle = await updateArticle(article.id, {
-    content: enhancedResult.enhancedContent
+    enhancedContent: enhancedResult.enhancedContent,
+    references: enhancedResult.references.join('\n\n'),
   });
 
   if (!updatedArticle) {

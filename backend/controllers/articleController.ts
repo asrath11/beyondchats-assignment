@@ -30,7 +30,7 @@ export async function createArticle(req: Request, res: Response) {
     }
 
     const article = await prisma.article.create({
-      data: { title, link, content },
+      data: { title, link, originalContent: content },
     });
 
     res.status(201).json(article);
@@ -88,7 +88,7 @@ export async function updateArticle(req: Request, res: Response) {
       return;
     }
 
-    const { title, link, content } = req.body;
+    const { title, link, content, enhancedContent, references } = req.body;
 
     // Check if article exists
     const existing = await prisma.article.findUnique({ where: { id } });
@@ -98,10 +98,12 @@ export async function updateArticle(req: Request, res: Response) {
     }
 
     // Validation - at least one field required
-    if (!title && !link && !content) {
+    if (!title && !link && !content && !enhancedContent && !references) {
       res.status(400).json({
         error: 'Validation failed',
-        details: ['At least one field (title, link, or content) is required'],
+        details: [
+          'At least one field (title, link, content, enhancedContent, or references) is required',
+        ],
       });
       return;
     }
@@ -111,7 +113,9 @@ export async function updateArticle(req: Request, res: Response) {
       data: {
         ...(title && { title }),
         ...(link && { link }),
-        ...(content && { content }),
+        ...(content && { originalContent: content }),
+        ...(enhancedContent && { enhancedContent }),
+        ...(references && { references }),
       },
     });
 
@@ -171,7 +175,7 @@ export async function scrapeAndStore(_req: Request, res: Response) {
         data: {
           title: article.title,
           link: article.link,
-          content: content,
+          originalContent: content,
         },
       });
       newArticles.push(newArticle);

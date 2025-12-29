@@ -5,7 +5,10 @@ const API_BASE_URL = 'http://localhost:3000/api';
 export interface Article {
   id: string;
   title: string;
-  content: string;
+  link: string;
+  originalContent: string;
+  enhancedContent?: string;
+  references?: string;
   createdAt: string;
   updatedAt: string;
 }
