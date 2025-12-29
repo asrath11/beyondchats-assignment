@@ -12,7 +12,7 @@ import { searchGoogle } from './services/googleSearchService';
     return;
   }
   for (const article of articles) {
-    // const links = await searchGoogle(article.title)
+    const links = await searchGoogle(article.title)
     const content = await scrapeArticleContent(article.link);
     console.log(content);
   }
