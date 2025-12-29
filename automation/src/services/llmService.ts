@@ -1,13 +1,24 @@
 // src/services/llmService.ts
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY as string);
+let genAI: GoogleGenAI | null = null;
+
+function initializeGenAI() {
+  if (!genAI) {
+    const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error('GOOGLE_GEMINI_API_KEY environment variable is not set');
+    }
+    genAI = new GoogleGenAI({ apiKey });
+  }
+  return genAI;
+}
 
 export async function enhanceArticleWithLLM(
   originalContent: string,
   referenceContents: string[]
 ): Promise<{ enhancedContent: string; references: string[] }> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const genAIInstance = initializeGenAI();
 
   const prompt = `
 You are an expert content editor. 
@@ -51,19 +62,25 @@ Return ONLY the improved article in **Markdown** ending with:
 - <reference link 1>
 - <reference link 2>
 
-Use these reference URLs:
-${referenceContents.join('\n')}
+Use these reference URLs from the sources above.
 `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response = await genAIInstance.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+
     return {
-      enhancedContent: response.text(),
+      enhancedContent: response.text || '',
       references: referenceContents,
     };
-  } catch (error) {
-    console.error('Error calling Gemini API:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('Error calling Gemini API:', {
+      message: error.message,
+      status: error.status,
+      details: error.errorDetails,
+    });
+    throw new Error(`Gemini API failed: ${error.message}`);
   }
 }

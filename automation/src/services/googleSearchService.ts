@@ -3,7 +3,6 @@ import axios from 'axios';
 interface OrganicResult {
   link: string;
 }
-
 export const searchGoogle = async (query: string) => {
   const res = await axios.get('https://serpapi.com/search', {
     params: {

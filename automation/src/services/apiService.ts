@@ -1,4 +1,4 @@
-import { api } from "./lib/axio.js";
+import { api } from "../lib/axio";
 import axios from "axios";
 
 // Article types
