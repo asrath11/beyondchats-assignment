@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use(morgan('dev'))
-app.use('/articles', articleRouter)
+app.use('/api/articles', articleRouter)
 
 const PORT = process.env.PORT || 3000
 
