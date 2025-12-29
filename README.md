@@ -192,8 +192,8 @@ npm run build   # Production build
 
 ## 📱 Live Demo
 
-**Frontend**: [Your Live Link Here]
-**Backend API**: [Your API Endpoint Here]
+**Frontend**: https://beyondchats-assignment-kappa.vercel.app/
+**Backend API**: https://beyondchats-assignment-production-683a.up.railway.app/
 
 ## 🛠️ Technologies Used
 
