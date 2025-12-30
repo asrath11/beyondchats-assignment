@@ -4,7 +4,7 @@
 
 This project implements a complete article enhancement platform with AI-powered content improvement. The system consists of three main components:
 
-1. **Backend API** - Laravel/Node.js CRUD API for article management
+1. **Backend API** - Node.js CRUD API for article management
 2. **Automation Script** - Node.js script that enhances articles using Google search and AI
 3. **Frontend** - ReactJS application to display original and enhanced articles
 
