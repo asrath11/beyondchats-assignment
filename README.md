@@ -96,6 +96,12 @@ DATABASE_URL=your_database_url
 PORT=3000
 ```
 
+### Client (.env)
+
+```
+VITE_API_URL=your-backend-api-url
+```
+
 ### Automation (.env)
 
 ```
