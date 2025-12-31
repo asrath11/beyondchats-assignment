@@ -239,11 +239,3 @@ This is an assignment project. For contributions:
 ## 📄 License
 
 This project remains the property of the developer. BeyondChats will not use any part of this submission unless the developer is selected for the position.
-
-## 📞 Support
-
-For any queries regarding this assignment, please message on **Internshala**.
-
----
-
-**⭐ ALL THE BEST!**
